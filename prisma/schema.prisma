@@ -14,17 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
 
 // Necessary for Next auth
 model Account {
@@ -62,7 +51,55 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    bases         Base[]
+}
+
+model Base {
+    id           String   @id @default(cuid())
+    name         String
+    userId       String
+    user         User     @relation(fields: [userId], references: [id])
+    tables       Table[]
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}
+
+model Table {
+    id           String   @id @default(cuid())
+    name         String
+    baseId       String
+    base         Base     @relation(fields: [baseId], references: [id])
+    columns      Column[]
+    rows         Row[]
+}
+
+model Column {
+    id           String   @id @default(cuid())
+    name         String
+    tableId      String
+    table        Table    @relation(fields: [tableId], references: [id])
+    cells        Cell[]
+}
+
+model Row {
+    id           String   @id @default(cuid())
+    tableId      String
+    table        Table    @relation(fields: [tableId], references: [id])
+    cells        Cell[]
+}
+
+model Cell {
+    id           String   @id @default(cuid())
+    columnId     String
+    rowId        String
+    column       Column   @relation(fields: [columnId], references: [id])
+    row          Row      @relation(fields: [rowId], references: [id])
+    value        String
+}
+
+enum ColumnType {
+    TEXT
+    NUMBER
 }
 
 model VerificationToken {
