@@ -8,6 +8,7 @@ import { Button } from "@headlessui/react";
 
 
 export function BaseTiles({ bases }: { bases: Base[] }) {
+    console.log(bases);
     return (
         <div className="flex min-h-screen container flex-start ml-10 mt-5">
             <div className="flex flex-col container">
@@ -20,12 +21,12 @@ export function BaseTiles({ bases }: { bases: Base[] }) {
                             <span className="text-gray-600 font-medium">+ New Base</span>
                         </div>
 
-                        {[1, 2, 3,4,5,6,8,9].map((n) => (
+                        {bases.map((n) => (
                             <div
-                                key={n}
+                                key={n.id}
                                 className="border rounded p-4 hover:shadow-md flex flex-col justify-between"
                             >
-                                <div className="text-lg font-semibold">Base {n}</div>
+                                <div className="text-lg font-semibold">Base {n.id}</div>
                                 <Button className="text-red-500 mt-2 self-end text-sm" onClick={() => console.log("HI")}>Delete</Button>
                             </div>
                         ))}

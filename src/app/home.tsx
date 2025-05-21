@@ -1,8 +1,6 @@
 import { NavbarHome } from "./_components/navbarHome";
-import { auth } from "@/server/auth";
-import { Button } from '@headlessui/react'
 import { BaseTiles } from "./_components/baseTiles";
-import { api, HydrateClient } from "@/trpc/server";
+import { api } from "@/trpc/server";
 
 
 export default async function Home() {
