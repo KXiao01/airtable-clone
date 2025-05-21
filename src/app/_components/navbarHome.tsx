@@ -24,6 +24,8 @@ export async function NavbarHome() {
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
                   <Image
+                    width={40}
+                    height={40}
                     alt=""
                     src="https://ih1.redbubble.net/image.2991310218.5250/flat,750x,075,f-pad,750x1000,f8f8f8.jpg"
                     className="size-8 rounded-full"
