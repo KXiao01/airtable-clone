@@ -2,6 +2,7 @@
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
 import { db } from "@/server/db";
+import { z } from 'zod';
 
 export const baseRouter = createTRPCRouter({
     getUserBases: protectedProcedure.query(async ({ ctx }) => {
@@ -21,5 +22,40 @@ export const baseRouter = createTRPCRouter({
         });
         return bases;
     }
-    )
+    ),
+
+    create: protectedProcedure.mutation(async ({ ctx }) => {
+        const userId = ctx.session.user.id;
+        const base = await db.base.create({
+            data: {
+                name: "Untitled Base",
+                userId: userId,
+            },
+        });
+        return base;
+    }
+    ),
+
+    delete: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ ctx, input }) => {
+        const userId = ctx.session.user.id;
+        const base = await db.base.findUnique({
+            where: {
+                id: input.id,
+                userId: userId,
+            },
+        });
+
+        if (!base || base.userId !== userId) {
+            throw new Error("Unauthorized or base not found");
+        }
+
+        await db.base.delete({
+            where: {
+                id: input.id,
+            },
+        });
+
+        return { success: true };
+    }
+    ),
 });
