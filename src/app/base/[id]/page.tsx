@@ -4,12 +4,10 @@ import Table from "./components/table";
 import TableBar from "./components/tableBar";
 
 
-interface BasePageProps {
-  params: { id: string };
-}
+type Params = Promise<{ id: string }>;
 
-export default async function Base({ params }: BasePageProps) {
-  const { id } = params;
+export default async function Base({ params }: {params: Params}) {
+  const { id } = await params;
   const base = await api.base.getBase({ id });
 
 
