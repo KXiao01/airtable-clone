@@ -1,8 +1,12 @@
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
+import { ColumnType } from "@prisma/client";
+
 import { db } from "@/server/db";
 import { z } from 'zod';
+
+import { defaultTable } from "./lib/defaultTable";
 
 export const baseRouter = createTRPCRouter({
     getUserBases: protectedProcedure.query(async ({ ctx }) => {
@@ -32,6 +36,8 @@ export const baseRouter = createTRPCRouter({
                 userId: userId,
             },
         });
+
+        await defaultTable(base.id, "Untitled Table", userId);
         return base;
     }
     ),
@@ -43,12 +49,14 @@ export const baseRouter = createTRPCRouter({
                 id: input.id,
                 userId: userId,
             },
+
         });
 
         if (!base || base.userId !== userId) {
             throw new Error("Unauthorized or base not found");
         }
 
+        
         await db.base.delete({
             where: {
                 id: input.id,
@@ -56,6 +64,34 @@ export const baseRouter = createTRPCRouter({
         });
 
         return { success: true };
+    }
+    ),
+
+    getBase: protectedProcedure.input(z.object({ id: z.string() })).query(async ({ ctx, input }) => {
+        const userId = ctx.session.user.id;
+        const base = await db.base.findUnique({
+            where: {
+                id: input.id,
+                userId: userId,
+            },
+            include: {
+                tables: true,
+            },
+            // include: {
+            //     user: {
+            //         select: {
+            //             id: true,
+            //             name: true,
+            //         },
+            //     },
+            // },
+        });
+
+        if (!base || base.userId !== userId) {
+            throw new Error("Unauthorized or base not found");
+        }
+
+        return base;
     }
     ),
 });
