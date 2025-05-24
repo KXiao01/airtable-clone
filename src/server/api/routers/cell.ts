@@ -8,7 +8,7 @@ import { z } from 'zod';
 
 export const cellRouter = createTRPCRouter({
     create: protectedProcedure
-        .input(z.object({ rowId: z.string(), columnId: z.string(), value: z.any() }))
+        .input(z.object({ rowId: z.string(), columnId: z.string(), value: z.string() }))
         .mutation(async ({ ctx, input }) => {
             const userId = ctx.session.user.id;
             const base = await db.base.findFirst({

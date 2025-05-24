@@ -43,19 +43,18 @@ export async function defaultTable(baseId: string, name: string, userId: string)
         },
     });
 
-    const columns = [column1, column2, column3];
 
     const row1 = await db.row.create({
         data: { tableId: table.id },
     });
-    const row2 = await db.row.create({
+    await db.row.create({
         data: { tableId: table.id },
     });
-    const row3 = await db.row.create({
+    await db.row.create({
         data: { tableId: table.id },
     });
 
-    const cells = await db.cell.createMany({
+    await db.cell.createMany({
         data: [
             {
                 rowId: row1.id,

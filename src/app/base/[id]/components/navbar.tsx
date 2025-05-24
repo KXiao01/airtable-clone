@@ -5,13 +5,6 @@ import Image from 'next/image';
 import type { Base, Table } from "@prisma/client";
 
 
-
-import TableBar from './tableBar';
-
-
-
-
-
 type NavbarProps = Base & {
     tables: Table[];
 };

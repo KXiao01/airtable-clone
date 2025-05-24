@@ -9,7 +9,7 @@ interface BasePageProps {
 }
 
 export default async function Base({ params }: BasePageProps) {
-  const { id } = await params;
+  const { id } = params;
   const base = await api.base.getBase({ id });
 
 

@@ -1,7 +1,6 @@
 
 import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 
-import { ColumnType } from "@prisma/client";
 
 import { db } from "@/server/db";
 import { z } from 'zod';
@@ -77,14 +76,6 @@ export const baseRouter = createTRPCRouter({
             include: {
                 tables: true,
             },
-            // include: {
-            //     user: {
-            //         select: {
-            //             id: true,
-            //             name: true,
-            //         },
-            //     },
-            // },
         });
 
         if (!base || base.userId !== userId) {
